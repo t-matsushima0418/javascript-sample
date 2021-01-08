@@ -13,8 +13,17 @@
 <canvas id="myCanvas" width="480" height="320"></canvas>
 
 <script>
-	// JavaScriptのコードがここに入ります
+	// JavaScriptのコードが入ります
 </script>
 
 </body>
 </html>
+
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d")
+
+ctx.beginPath();
+ctx.rect(20,40,50,50);
+ctx.fillstyle = "#FF0000";
+ctx.fill();
+ctx.closePath();
