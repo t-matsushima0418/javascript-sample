@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas class="stage"></canvas>
+
+    <script>
+        function init() {
+
+            //レンダラーを作成
+            const renderer = new THREE.WebGLRenderer({
+                canvas: document.querySelector(".stage")
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            //シーンを作成
+            const scene = new THREE.Scene();
+
+            //カメラを作成
+            const camera = new THREE.PerspectiveCamera(
+                50,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                2000
+            );
+            camera.position.set(0, 0, 1000);
+
+
+
+
+
+            // 平行光源
+            const directionalLight = new THREE.DirectionalLight(0xffffff);
+            directionalLight.position.set(1, 100, 100);
+            scene.add(directionalLight);
+
+            //球を作成
+            const geometry1 = new THREE.SphereGeometry(30, 50, 50);
+            const material1 = new THREE.MeshNormalMaterial();
+            const mesh1 = new THREE.Mesh(geometry1, material1);
+
+
+
+            //物体を作成
+            const geometry2 = new THREE.BoxGeometry(80, 80, 80);
+            const material2 = new THREE.MeshBasicMaterial({ color: 0x333399, roughness: 1 });
+
+            const geometry3 = new THREE.BoxGeometry(250, 30, 80);
+            const material3 = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            var paddle = new THREE.Mesh(geometry3, material3);
+
+            const cube1 = new THREE.Mesh(geometry2, material2);
+            const cube2 = new THREE.Mesh(geometry2, material2);
+            const cube3 = new THREE.Mesh(geometry2, material2);
+            const cube4 = new THREE.Mesh(geometry2, material2);
+            const cube5 = new THREE.Mesh(geometry2, material2);
+            const cube6 = new THREE.Mesh(geometry2, material2);
+            const cube7 = new THREE.Mesh(geometry2, material2);
+            const cube8 = new THREE.Mesh(geometry2, material2);
+            const cube9 = new THREE.Mesh(geometry2, material2);
+            const cube10 = new THREE.Mesh(geometry2, material2);
+            const cube11 = new THREE.Mesh(geometry2, material2);
+            const cube12 = new THREE.Mesh(geometry2, material2);
+            const cube13 = new THREE.Mesh(geometry2, material2);
+            const cube14 = new THREE.Mesh(geometry2, material2);
+            const cube15 = new THREE.Mesh(geometry2, material2);
+            var dx = 2;
+            var dy = 2;
+
+            scene.add(mesh1, paddle, cube1, cube2, cube3, cube4, cube5, cube6, cube7, cube8, cube9, cube10, cube11, cube12, cube13, cube14, cube15);
+
+            renderScene();
+
+            //アニメーション
+            function renderScene() {
+                mesh1.position.x += dx;
+                mesh1.position.y += dy;
+                paddle.position.x = 0;
+                paddle.position.y = -400;
+
+                cube1.position.x = -400;
+                cube1.position.y = 400;
+                cube2.position.x = -200;
+                cube2.position.y = 400;
+                cube3.position.x = 0;
+                cube3.position.y = 400;
+                cube4.position.x = 200;
+                cube4.position.y = 400;
+                cube5.position.x = 400;
+                cube5.position.y = 400;
+
+                cube6.position.x = -400;
+                cube6.position.y = 250;
+                cube7.position.x = -200;
+                cube7.position.y = 250;
+                cube8.position.x = 0;
+                cube8.position.y = 250;
+                cube9.position.x = 200;
+                cube9.position.y = 250;
+                cube10.position.x = 400;
+                cube10.position.y = 250;
+
+                cube11.position.x = -400;
+                cube11.position.y = 100;
+                cube12.position.x = -200;
+                cube12.position.y = 100;
+                cube13.position.x = 0;
+                cube13.position.y = 100;
+                cube14.position.x = 200;
+                cube14.position.y = 100;
+                cube15.position.x = 400;
+                cube15.position.y = 100;
+
+                requestAnimationFrame(renderScene);
+                renderer.render(scene, camera);
+            }
+        }
+        if (mesh1.position.x > 400 || mesh1.position.x < -400) {
+            dx = -dx;
+        }
+        if (mesh1.position.y > 400 || mesh1.position.y < -400) {
+            dy = -dy;
+        }
+
+
+            window.addEventListener("load", init);
+
+            var x = canvas.width / 2;
+            var y = canvas.height - 30;
+            var dx = 2;
+            var dy = -2;
+            var paddleHeight = 10;
+            var paddleWidth = 75;
+            var rightPressed = false;
+            var leftPressed = false;
+            var brickRowCount = 5;
+            var brickColumnCount = 3;
+            var brickWidth = 75;
+            var brickHeight = 20;
+            var brickPadding = 10;
+            var brickOffsetTop = 30;
+            var brickOffsetLeft = 30;
+            var score = 0;
+            var lives = 3;
+
+            var bricks = [];
+            for (var c = 0; c < brickColumnCount; c++) {
+                bricks[c] = [];
+                for (var r = 0; r < brickRowCount; r++) {
+                    bricks[c][r] = { x: 0, y: 0, status: 1 };
+                }
+            }
+
+            document.addEventListener("keydown", keyDownHandler, false);
+            document.addEventListener("keyup", keyUpHandler, false);
+            document.addEventListener("mousemove", mouseMoveHandler, false);
+
+            function keyDownHandler(e) {
+                if (e.key == "Right" || e.key == "ArrowRight") {
+                    rightPressed = true;
+                }
+                else if (e.key == "Left" || e.key == "ArrowLeft") {
+                    leftPressed = true;
+                }
+            }
+
+            function keyUpHandler(e) {
+                if (e.key == "Right" || e.key == "ArrowRight") {
+                    rightPressed = false;
+                }
+                else if (e.key == "Left" || e.key == "ArrowLeft") {
+                    leftPressed = false;
+                }
+            }
+
+            function mouseMoveHandler(e) {
+                var relativeX = e.clientX - canvas.offsetLeft;
+                if (relativeX > 0 && relativeX < canvas.width) {
+                    paddleX = relativeX - paddleWidth / 2;
+                }
+            }
+            function collisionDetection() {
+                for (var c = 0; c < brickColumnCount; c++) {
+                    for (var r = 0; r < brickRowCount; r++) {
+                        var b = bricks[c][r];
+                        if (b.status == 1) {
+                            if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+                                dy = -dy;
+                                b.status = 0;
+                                score++;
+                                if (score == brickRowCount * brickColumnCount) {
+                                    alert("YOU WIN, CONGRATS!");
+                                    document.location.reload();
+                                    clearInterval(interval); // Needed for Chrome to end game
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            function drawScore() {
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "#0095DD";
+                ctx.fillText("Score: " + score, 8, 20);
+            }
+
+            function drawLives() {
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "#0095DD";
+                ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawBricks();
+                drawBall();
+                drawPaddle();
+                drawScore();
+                drawLives();
+                collisionDetection();
+
+                if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+                    dx = -dx;
+                }
+                if (y + dy < ballRadius) {
+                    dy = -dy;
+                }
+                else if (y + dy > canvas.height - ballRadius) {
+                    if (x > paddleX && x < paddleX + paddleWidth) {
+                        dy = -dy;
+                    }
+                    else {
+                        lives--;
+                        if (!lives) {
+                            alert("GAME OVER");
+                            document.location.reload();
+                        }
+                        else {
+                            x = canvas.width / 2;
+                            y = canvas.height - 30;
+                            dx = 2;
+                            dy = -2;
+                            paddleX = (canvas.width - paddleWidth) / 2;
+                        }
+                    }
+                }
+
+                if (rightPressed && paddleX < canvas.width - paddleWidth) {
+                    paddleX += 7;
+                }
+                else if (leftPressed && paddleX > 0) {
+                    paddleX -= 7;
+                }
+
+                x += dx;
+                y += dy;
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+
+    </script>
+</body>
+
+</html>
