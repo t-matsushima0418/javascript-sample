@@ -17,6 +17,35 @@
     <canvas class="stage"></canvas>
 
     <script>
+
+        var paddleHeight = 30;//台の高さ
+        var paddleWidth = 250;//台の長さ
+        var paddledepth = 80;//台の奥行き
+        var paddleX = 0;//
+        var rightPressed = false;//
+        var leftPressed = false;//
+        var brickRowCount = 5;//ブロックの列
+        var brickColumnCount = 3;//ブロックの行
+        var brickWidth = 80;//ブロックの横
+        var brickHeight = 80;//ブロックの高さ
+        var brickdepth = 80;//ブロックの奥行
+        var brickPadding = 70;//ブロックの横の間隔
+        var brickOffsetTop = 0;//ブロックの頂点の位置
+        var brickOffsetLeft = -350;//ブロックの左基位置
+        var ballRadius = 30;//ボールの半径
+        var score = 0;//スコア
+        var lives = 3;//ライフ
+        var dx = 2;
+        var dy = 2;
+        var bricks = [];//ブロックの個数（行列）の定義
+        for (var c = 0; c < brickColumnCount; c++) {
+            bricks[c] = [];
+            for (var r = 0; r < brickRowCount; r++) {
+                bricks[c][r] = { x: 0, y: 0, z: 0, status: 1 };
+            }
+        }
+        var cube = [];
+
         function init() {
 
             //レンダラーを作成
@@ -47,125 +76,24 @@
             scene.add(directionalLight);
 
             //球を作成
-            const geometry1 = new THREE.SphereGeometry(30, 50, 50);
+            const geometry1 = new THREE.SphereGeometry(ballRadius, 50, 0);//（半径,緯度分割数,経度分割数）
             const material1 = new THREE.MeshNormalMaterial();
             const mesh1 = new THREE.Mesh(geometry1, material1);
-
-
+            mesh1.position.x = 0;
+            mesh1.position.y = -200;
 
             //物体を作成
-            const geometry2 = new THREE.BoxGeometry(80, 80, 80);
+            const geometry2 = new THREE.BoxGeometry(brickWidth, brickHeight, brickdepth);
             const material2 = new THREE.MeshBasicMaterial({ color: 0x333399, roughness: 1 });
-
-            const geometry3 = new THREE.BoxGeometry(250, 30, 80);
+            const geometry3 = new THREE.BoxGeometry(paddleWidth, paddleHeight, paddledepth);//横,縦,奥行き
             const material3 = new THREE.MeshBasicMaterial({ color: 0xffffff });
             var paddle = new THREE.Mesh(geometry3, material3);
 
-            const cube1 = new THREE.Mesh(geometry2, material2);
-            const cube2 = new THREE.Mesh(geometry2, material2);
-            const cube3 = new THREE.Mesh(geometry2, material2);
-            const cube4 = new THREE.Mesh(geometry2, material2);
-            const cube5 = new THREE.Mesh(geometry2, material2);
-            const cube6 = new THREE.Mesh(geometry2, material2);
-            const cube7 = new THREE.Mesh(geometry2, material2);
-            const cube8 = new THREE.Mesh(geometry2, material2);
-            const cube9 = new THREE.Mesh(geometry2, material2);
-            const cube10 = new THREE.Mesh(geometry2, material2);
-            const cube11 = new THREE.Mesh(geometry2, material2);
-            const cube12 = new THREE.Mesh(geometry2, material2);
-            const cube13 = new THREE.Mesh(geometry2, material2);
-            const cube14 = new THREE.Mesh(geometry2, material2);
-            const cube15 = new THREE.Mesh(geometry2, material2);
-            var dx = 2;
-            var dy = 2;
-
-            scene.add(mesh1, paddle, cube1, cube2, cube3, cube4, cube5, cube6, cube7, cube8, cube9, cube10, cube11, cube12, cube13, cube14, cube15);
-
-            renderScene();
-
-            //アニメーション
-            function renderScene() {
-                mesh1.position.x += dx;
-                mesh1.position.y += dy;
-                paddle.position.x = 0;
-                paddle.position.y = -400;
-
-                cube1.position.x = -400;
-                cube1.position.y = 400;
-                cube2.position.x = -200;
-                cube2.position.y = 400;
-                cube3.position.x = 0;
-                cube3.position.y = 400;
-                cube4.position.x = 200;
-                cube4.position.y = 400;
-                cube5.position.x = 400;
-                cube5.position.y = 400;
-
-                cube6.position.x = -400;
-                cube6.position.y = 250;
-                cube7.position.x = -200;
-                cube7.position.y = 250;
-                cube8.position.x = 0;
-                cube8.position.y = 250;
-                cube9.position.x = 200;
-                cube9.position.y = 250;
-                cube10.position.x = 400;
-                cube10.position.y = 250;
-
-                cube11.position.x = -400;
-                cube11.position.y = 100;
-                cube12.position.x = -200;
-                cube12.position.y = 100;
-                cube13.position.x = 0;
-                cube13.position.y = 100;
-                cube14.position.x = 200;
-                cube14.position.y = 100;
-                cube15.position.x = 400;
-                cube15.position.y = 100;
-
-                requestAnimationFrame(renderScene);
-                renderer.render(scene, camera);
-            }
-        }
-        if (mesh1.position.x > 400 || mesh1.position.x < -400) {
-            dx = -dx;
-        }
-        if (mesh1.position.y > 400 || mesh1.position.y < -400) {
-            dy = -dy;
-        }
 
 
-            window.addEventListener("load", init);
-
-            var x = canvas.width / 2;
-            var y = canvas.height - 30;
-            var dx = 2;
-            var dy = -2;
-            var paddleHeight = 10;
-            var paddleWidth = 75;
-            var rightPressed = false;
-            var leftPressed = false;
-            var brickRowCount = 5;
-            var brickColumnCount = 3;
-            var brickWidth = 75;
-            var brickHeight = 20;
-            var brickPadding = 10;
-            var brickOffsetTop = 30;
-            var brickOffsetLeft = 30;
-            var score = 0;
-            var lives = 3;
-
-            var bricks = [];
-            for (var c = 0; c < brickColumnCount; c++) {
-                bricks[c] = [];
-                for (var r = 0; r < brickRowCount; r++) {
-                    bricks[c][r] = { x: 0, y: 0, status: 1 };
-                }
-            }
-
-            document.addEventListener("keydown", keyDownHandler, false);
-            document.addEventListener("keyup", keyUpHandler, false);
-            document.addEventListener("mousemove", mouseMoveHandler, false);
+            document.addEventListener("keydown", keyDownHandler, false);//方向キー押す
+            document.addEventListener("keyup", keyUpHandler, false);//方向キー離す
+            document.addEventListener("mousemove", mouseMoveHandler, false);//マウス
 
             function keyDownHandler(e) {
                 if (e.key == "Right" || e.key == "ArrowRight") {
@@ -176,6 +104,7 @@
                 }
             }
 
+            //
             function keyUpHandler(e) {
                 if (e.key == "Right" || e.key == "ArrowRight") {
                     rightPressed = false;
@@ -185,93 +114,342 @@
                 }
             }
 
+
+            //マウス操作
             function mouseMoveHandler(e) {
-                var relativeX = e.clientX - canvas.offsetLeft;
-                if (relativeX > 0 && relativeX < canvas.width) {
-                    paddleX = relativeX - paddleWidth / 2;
+                var relativeX = e.clientX - 400;
+                if (relativeX > 0 && relativeX < 800) {
+                    paddle.x = relativeX - paddleWidth / 2;
                 }
             }
+
+
+
+            //ブロックを描く
+            function drawBricks() {
+                for (var c = 0; c < brickColumnCount; c++) {
+                    for (var r = 0; r < brickRowCount; r++) {
+                        if (bricks[c][r].status == 1) {
+                            var i = 10 * c + r;
+                            cube[i] = new THREE.Mesh(geometry2, material2);
+                            var brickX = (r * (brickWidth + brickPadding)) + brickOffsetLeft;
+                            var brickY = (c * (brickHeight + brickPadding)) + brickOffsetTop;
+                            bricks[c][r].x = brickX;
+                            bricks[c][r].y = brickY;
+                            cube[i].position.x = bricks[c][r].x;
+                            cube[i].position.y = bricks[c][r].y;
+                            cube[i].position.z = 0;
+
+                            scene.add(cube[i]);
+                        }
+                    }
+                }
+            }
+
+            scene.add(mesh1, paddle,);
+
+            //台を描く
+            function drawPaddle() {
+                paddle.position.x = paddleX;
+                paddle.position.y = -400;
+                paddle.position.z = 0;
+            }
+
+
+
+            //アニメーション
+            function renderScene() {
+                mesh1.position.x += dx;
+                mesh1.position.y += dy;
+                mesh1.position.z = 0
+
+
+                if (mesh1.position.x > 470 || mesh1.position.x < -470) {
+                    dx = -dx;
+                }
+                if (mesh1.position.y > 430 || mesh1.position.y < -430) {
+                    dy = -dy;
+                }
+                drawPaddle();
+                renderer.render(scene, camera);
+            }
+
+            //ボールの衝突検査
             function collisionDetection() {
                 for (var c = 0; c < brickColumnCount; c++) {
                     for (var r = 0; r < brickRowCount; r++) {
                         var b = bricks[c][r];
+                        var i = 10 * c + r;
                         if (b.status == 1) {
-                            if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+                            if (mesh1.position.x > b.x - (brickWidth / 2) && mesh1.position.x < b.x + (brickWidth / 2) && mesh1.position.y + ballRadius - (brickHeight / 2) > b.y && mesh1.position.y - ballRadius < b.y + (brickHeight / 2)) {
                                 dy = -dy;
+                                scene.remove(cube[i]);
                                 b.status = 0;
-                                score++;
-                                if (score == brickRowCount * brickColumnCount) {
-                                    alert("YOU WIN, CONGRATS!");
-                                    document.location.reload();
-                                    clearInterval(interval); // Needed for Chrome to end game
-                                }
                             }
+                            if (mesh1.position.y > b.y - (brickHeight / 2) && mesh1.position.y < b.y + (brickHeight / 2) && mesh1.position.x + ballRadius > b.x - (brickWidth / 2) && mesh1.position.x - ballRadius < b.x + (brickWidth / 2)) {
+                                dx = -dx;
+                                scene.remove(cube[i]);
+                                b.status = 0;
+                            }
+
+
                         }
                     }
                 }
             }
-            function drawScore() {
-                ctx.font = "16px Arial";
-                ctx.fillStyle = "#0095DD";
-                ctx.fillText("Score: " + score, 8, 20);
-            }
 
-            function drawLives() {
-                ctx.font = "16px Arial";
-                ctx.fillStyle = "#0095DD";
-                ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
-            }
 
-            function draw() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                drawBricks();
-                drawBall();
-                drawPaddle();
-                drawScore();
-                drawLives();
+            drawBricks();
+
+            function start() {
+                renderScene();
                 collisionDetection();
-
-                if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
-                    dx = -dx;
-                }
-                if (y + dy < ballRadius) {
-                    dy = -dy;
-                }
-                else if (y + dy > canvas.height - ballRadius) {
-                    if (x > paddleX && x < paddleX + paddleWidth) {
-                        dy = -dy;
-                    }
-                    else {
-                        lives--;
-                        if (!lives) {
-                            alert("GAME OVER");
-                            document.location.reload();
-                        }
-                        else {
-                            x = canvas.width / 2;
-                            y = canvas.height - 30;
-                            dx = 2;
-                            dy = -2;
-                            paddleX = (canvas.width - paddleWidth) / 2;
-                        }
-                    }
-                }
-
-                if (rightPressed && paddleX < canvas.width - paddleWidth) {
-                    paddleX += 7;
-                }
-                else if (leftPressed && paddleX > 0) {
-                    paddleX -= 7;
-                }
-
-                x += dx;
-                y += dy;
-                requestAnimationFrame(draw);
+                requestAnimationFrame(start);
             }
 
-            draw();
+            start();
+
+        }
+
+
+        window.addEventListener("load", init);
 
     </script>
 </body>
 
 </html>
+
+
+
+
+<!--
+
+
+次回試す内容
+    var cube = [];
+function calculation() {
+for (var c = 0; c < 3; c++) {
+for (var r = 0; r < 5; r++) {
+var i = (c + 1) * (r + 1);
+cube[i] = i
+ 
+console.log(cube[i]);
+}
+}
+}
+    
+calculation();
+
+
+
+<!DOCTYPE html>*/
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Gamedev Canvas Workshop - lesson 2: move the ball</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="myCanvas" width="480" height="320"></canvas>
+
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var ballRadius = 10;//ボールの半径
+        var x = canvas.width / 2;//キャンパスの横の半分
+        var y = canvas.height - 30;//キャンパスの高さ-30
+        var dx = 2;
+        var dy = -2;
+        var paddleHeight = 10;//台の高さ
+        var paddleWidth = 75;//台の長さ
+        var paddleX = (canvas.width - paddleWidth) / 2;//
+        var rightPressed = false;//
+        var leftPressed = false;//
+        var brickRowCount = 5;//ブロックの列
+        var brickColumnCount = 3;//ブロックの行
+        var brickWidth = 75;//ブロックの横
+        var brickHeight = 20;//ブロックの高さ
+        var brickPadding = 10;//ブロックの横の間隔
+        var brickOffsetTop = 30;//ブロックの頂点の位置
+        var brickOffsetLeft = 30;//ブロックの左基位置
+        var score = 0;//スコア
+        var lives = 3;//ライフ
+        var bricks = [];//ブロックの個数（行列）の定義
+        for (var c = 0; c < brickColumnCount; c++) {
+            bricks[c] = [];
+            for (var r = 0; r < brickRowCount; r++) {
+                bricks[c][r] = { x: 0, y: 0, status: 1 };
+            }
+        }
+
+        document.addEventListener("keydown", keyDownHandler, false);//方向キー押す
+        document.addEventListener("keyup", keyUpHandler, false);//方向キー離す
+
+
+        //
+        function keyDownHandler(e) {
+            if (e.key == "Right" || e.key == "ArrowRight") {
+                rightPressed = true;
+            }
+            else if (e.key == "Left" || e.key == "ArrowLeft") {
+                leftPressed = true;
+            }
+        }
+
+        //
+        function keyUpHandler(e) {
+            if (e.key == "Right" || e.key == "ArrowRight") {
+                rightPressed = false;
+            }
+            else if (e.key == "Left" || e.key == "ArrowLeft") {
+                leftPressed = false;
+            }
+        }
+
+        
+
+        //ボールの衝突検査
+        function collisionDetection() {
+            for (var c = 0; c < brickColumnCount; c++) {
+                for (var r = 0; r < brickRowCount; r++) {
+                    var b = bricks[c][r];
+                    if (b.status == 1) {
+                        if (x + 5 > b.x && x - 5 < b.x + brickWidth && y + 5 > b.y && y - 5 < b.y + brickHeight) {
+                            dy = -dy;
+                            b.status = 0;
+                            score++;
+                            if (score == brickRowCount * brickColumnCount) {
+                                alert("YOU WIN, CONGRATS!");
+                                document.location.reload();
+                                clearInterval(interval); // Needed for Chrome to end game
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //ボールを描く
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        //台を描く
+        function drawPaddle() {
+            ctx.beginPath();
+            ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        //ブロックを描く
+        function drawBricks() {
+            for (var c = 0; c < brickColumnCount; c++) {
+                for (var r = 0; r < brickRowCount; r++) {
+                    if (bricks[c][r].status == 1) {
+                        var brickX = (r * (brickWidth + brickPadding)) + brickOffsetLeft;
+                        var brickY = (c * (brickHeight + brickPadding)) + brickOffsetTop;
+                        bricks[c][r].x = brickX;
+                        bricks[c][r].y = brickY;
+                        ctx.beginPath();
+                        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                        ctx.fillStyle = "#0095DD";
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                }
+            }
+        }
+
+        //スコアを描く
+        function drawScore() {
+            ctx.font = "16px Arial";//文字サイズ
+            ctx.fillStyle = "#0095DD";//色
+            ctx.fillText("Score: " + score, 8, 20);//（表示名,xの位置,yの位置）
+        }
+
+        //ライフを描く
+        function drawLives(){
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "#0095DD";
+            ctx.fillText("Lives: "+lives, canvas. width-65,20);
+        }
+
+        //関数をまとめて実行
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBricks();
+            drawBall();
+            drawPaddle();
+            drawScore();
+            drawLives();
+            collisionDetection();
+
+            if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+                dx = -dx;
+            }
+            if (y + dy < ballRadius) {
+                dy = -dy;
+            }
+            else if (y + dy > canvas.height - ballRadius) {
+                if (x > paddleX && x < paddleX + paddleWidth) {
+                        dy = -dy;
+                    }
+                else {
+                    lives--;
+                    if(!lives){
+                    alert("GAME OVER");
+                    document.location.reload();
+                    }
+                    else{
+                        x = canvas.width / 2;
+                        y = canvas.height - 30;
+                        dx = 2;
+                        dy = -2;
+                        paddleX = (canvas.width-paddleWidth)/2;
+                    }
+                }
+            }
+
+            if (rightPressed && paddleX < canvas.width - paddleWidth) {
+                paddleX += 7;
+            }
+            else if (leftPressed && paddleX > 0) {
+                paddleX -= 7;
+            }
+
+            x += dx;
+            y += dy;
+
+            //drawを繰り返す
+            requestAnimationFrame(draw);
+        }
+
+        //drawを実行する
+        draw();  
+    </script>
+
+</body>
+
+</html>
+
+-->
